@@ -1,0 +1,77 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+
+{%- load_yaml as conntrack_os_family %}
+
+
+#base dictionary (defaults for all os's, will be merged with and overridden by os_family pillars)
+base:
+  #dictinary from defaults.yaml gets here
+  service:
+    name: conntrackd
+    state: running
+    enable: True
+  confdir: "/etc/conntrackd"
+  conffile: "conntrackd.conf"
+
+  # default settings
+  conf:
+    communication:
+      protocol: multicast
+      multicast:
+        IPv4_address: "225.0.0.50"
+      Port: "3780"
+      SndSocketBuffer: "1249280"
+      RcvSocketBuffer: "1249280"
+      Checksum: on
+
+    general:
+      Nice: "-20"
+      HashSize: "32768"
+      HashLimit: "131072"
+      LogFile: on
+      LockFile: /var/lock/conntrack.lock 
+      UNIX:
+        Path: /var/run/conntrackd.ctl
+        Backlog: "20"
+      NetlinkBufferSize: "2097152"
+      NetlinkBufferSizeMaxGrowth: "8388608"
+      Protocol_Accept:
+        - TCP
+        - SCTP
+        - DCCP
+      Address_Ignore:
+        IPv4:
+          #loopback
+          - "127.0.0.1"
+        IPv6: {}
+
+#nondebian / nonredhat (overrides base, is taken when os_family grain is not in available os's)
+default:
+  sysconfdir: /etc/sysconfig
+
+#debian (overrides base, is taken when os_family grain is Debian)
+Debian:
+  pkgs:
+    - conntrackd
+    - conntrack
+  sysconfdir: /etc/default
+
+#redhat (overrides base, is taken when os_family grain is RedHat)
+RedHat:
+  pkgs:
+    - conntrack-tools
+  sysconfdir: /etc/sysconfig
+
+{%- endload %}
+
+
+#create conntrack_default_plus_pillar_lookup where 
+# - base is defaults for all os's
+# - base is merged with and overridden by os_family settings (default if os_family could not be found in dict) 
+# - resulting dict is merged with 'conntrack:lookup' - pillar (pillar overrides)
+{%- set conntrack_default_plus_pillar_lookup = salt['grains.filter_by'](conntrack_os_family, grain='os_family', merge=salt['pillar.get']('conntrack:lookup'), default='default', base='base') %}
+
+
+# now conntrack_default_plus_pillar_lookup is merged with 'conntrack'-pillar ('conntrack'-pillar overrides conntrack_default_plus_pillar_lookup
+{%- set conntrack = salt['pillar.get']('conntrack', default=conntrack_default_plus_pillar_lookup, merge=True) %}

@@ -1,0 +1,53 @@
+Sync {
+	Mode FTFW {
+	}
+{%- if conntrack.conf.communication.protocol on ['multicast'] %}
+	Multicast {
+		IPv4_address {{conntrack.conf.communication.multicast.IPv4_address}}
+		Group {{conntrack.conf.communication.Port}}
+		IPv4_interface 192.168.100.100
+		Interface {{conntrack.conf.communication.Interface}}
+		SndSocketBuffer {{conntrack.conf.communication.SndSocketBuffer}}
+		RcvSocketBuffer {{conntrack.conf.communication.RcvSocketBuffer}}
+		Checksum {{conntrack.conf.communication.Checksum}}
+	}
+{%- elif conntrtack.conf.communication.protocol on ['multicast'] %}
+	UDP {
+		IPv4_address {{conntrack.conf.communication.udp.IPv4_address}}
+		IPv4_Destination_Address {{conntrack.conf.communication.udp.IPv4_Destination_Address}}
+		Port {{conntrack.conf.communication.Port}}
+		Interface {{conntrack.conf.communication.Interface}}
+		SndSocketBuffer {{conntrack.conf.communication.SndSocketBuffer}}
+		RcvSocketBuffer {{conntrack.conf.communication.RcvSocketBuffer}}
+		Checksum {{conntrack.conf.communication.Checksum}}
+	}
+{%- endif %}
+}
+General {
+	Nice {{conntrack.conf.general.Nice}}
+	HashSize {{conntrack.conf.general.HashSize}}
+	HashLimit {{conntrack.conf.general.HashLimit}}
+	LogFile {{conntrack.conf.general.LogFile}}
+	LockFile {{conntrack.conf.general.LockFile}}
+	UNIX {
+		Path {{conntrack.conf.general.UNIX.Path}}
+		Backlog {{conntrack.conf.general.UNIX.Backlog}}
+	}
+	NetlinkBufferSize {{conntrack.conf.general.NetlinkBufferSize}}
+	NetlinkBufferSizeMaxGrowth {{conntrack.conf.general.NetlinkBufferSizeMaxGrowth}}
+	Filter From Userspace {
+		Protocol Accept {
+{%- for protocol in conntrack.conf.general.Protocol_Accept %}
+			{{protocol}}
+{%- endfor %}
+		}
+		Address Ignore {
+{%- for address in conntrack.conf.general.Address_Ignore.IPv4 %}
+			IPv4_address {{address}}
+{%- endfor %}
+{%- for address in conntrack.conf.general.Address_Ignore.IPv6 %}
+			IPv6_address {{address}}
+{%- endfor %}
+		}
+	}
+}

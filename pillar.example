@@ -1,0 +1,49 @@
+conntrack:
+  lookup:
+    conf:
+      communication:
+        #protocol: multicast
+        #or 
+        #protocol: udp
+        multicast:
+          #IPv4_address: "225.0.0.50"
+          IPv4_interface: "192.168.100.100"
+        #udp:
+          #IPv4_address: "192.168.1.1"
+          #IPv4_Destination_Address: "192.168.1.2"
+      Interface: eth2
+      #Port: "3780"
+      #SndSocketBuffer: "1249280"
+      #RcvSocketBuffer: "1249280"
+      #Checksum: on
+
+    general:
+      #Nice: "-20"
+      #HashSize: "32768"
+      #HashLimit: "131072"
+      #LogFile: on
+      #LockFile: /var/lock/conntrack.lock
+      #UNIX:
+      #  Path: /var/run/conntrackd.ctl
+      #  Backlog: "20"
+      #NetlinkBufferSize: "2097152"
+      #NetlinkBufferSizeMaxGrowth: "8388608"
+      Protocol_Accept:
+      #  - TCP (default)
+      #  - SCTP (default)
+      #  - DCCP (default)
+        - ICMP
+        - IPv6-ICMP
+      Address_Ignore:
+        IPv4:
+          - "192.168.100.100"
+          - "192.168.100.101"
+          - "192.168.1.1"
+          - "192.168.1.2"
+          - "192.168.1.3"
+          - "192.168.1.1"
+          - "192.168.1.2"
+          - "192.168.1.3"
+        #IPv6:
+        #  #loopback
+        #  - "::1"
