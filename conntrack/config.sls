@@ -9,7 +9,7 @@ conntrack_config__conffile:
     - source: salt://conntrack/files/conntrack.conf.jinja
     - template: jinja
     - context:
-      confdict: {{conntrack|json}}
+      conntrack: {{conntrack|json}}
     - mode: 644
     - user: root
     - group: root

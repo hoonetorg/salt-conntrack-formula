@@ -1,17 +1,17 @@
 Sync {
 	Mode FTFW {
 	}
-{%- if conntrack.conf.communication.protocol on ['multicast'] %}
+{%- if conntrack.conf.communication.protocol in ['multicast'] %}
 	Multicast {
 		IPv4_address {{conntrack.conf.communication.multicast.IPv4_address}}
 		Group {{conntrack.conf.communication.Port}}
-		IPv4_interface 192.168.100.100
+		IPv4_interface {{conntrack.conf.communication.multicast.IPv4_interface}}
 		Interface {{conntrack.conf.communication.Interface}}
 		SndSocketBuffer {{conntrack.conf.communication.SndSocketBuffer}}
 		RcvSocketBuffer {{conntrack.conf.communication.RcvSocketBuffer}}
 		Checksum {{conntrack.conf.communication.Checksum}}
 	}
-{%- elif conntrtack.conf.communication.protocol on ['multicast'] %}
+{%- elif conntrtack.conf.communication.protocol in ['multicast'] %}
 	UDP {
 		IPv4_address {{conntrack.conf.communication.udp.IPv4_address}}
 		IPv4_Destination_Address {{conntrack.conf.communication.udp.IPv4_Destination_Address}}

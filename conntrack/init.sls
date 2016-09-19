@@ -17,4 +17,5 @@ extend:
         - file: conntrack_config__conffile
       - require:
         - pkg: conntrack_install__pkg
+        - file: conntrack_install__file_primary_backup.sh_perms
 

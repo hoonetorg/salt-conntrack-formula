@@ -23,13 +23,13 @@ base:
       Port: "3780"
       SndSocketBuffer: "1249280"
       RcvSocketBuffer: "1249280"
-      Checksum: on
+      Checksum: "on"
 
     general:
       Nice: "-20"
       HashSize: "32768"
       HashLimit: "131072"
-      LogFile: on
+      LogFile: "on"
       LockFile: /var/lock/conntrack.lock 
       UNIX:
         Path: /var/run/conntrackd.ctl
