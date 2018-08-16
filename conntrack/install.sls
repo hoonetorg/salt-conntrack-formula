@@ -18,6 +18,7 @@ conntrack_install__file_primary_backup.sh:
 conntrack_install__file_primary_backup.sh_perms:
   file.managed:
     - name: /usr/libexec/keepalived/primary-backup.sh
+    - replace: False
     - user: root
     - group: root
     - mode: "0755"
