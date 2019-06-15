@@ -5,7 +5,7 @@
 
 conntrack_install__pkg:
   pkg.installed:
-    - pkgs: {{ conntrack.pkgs }}
+    - pkgs: {{ conntrack.pkgs | tojson }}
 
 #FIXME find a better way
 conntrack_install__file_primary_backup.sh:
